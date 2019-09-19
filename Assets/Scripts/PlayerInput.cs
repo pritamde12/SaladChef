@@ -8,7 +8,8 @@ public class PlayerInput : MonoBehaviour
     public static UnityAction<Vector2> movePlayer_1;
     public static UnityAction<Vector2> movePlayer_2;
 
-
+    public static UnityAction InteractPlayer_1;
+    public static UnityAction InteractPlayer_2;
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +33,9 @@ public class PlayerInput : MonoBehaviour
         movePlayer_1?.Invoke(new Vector2(x_1, y_1));
         movePlayer_2?.Invoke(new Vector2(x_2, y_2));
 
-
+        if (Input.GetKeyDown(KeyCode.E))
+            InteractPlayer_1?.Invoke();
+        if (Input.GetKeyDown(KeyCode.RightControl))
+            InteractPlayer_2?.Invoke();
     }
 }
