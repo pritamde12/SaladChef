@@ -7,6 +7,7 @@ public class Food : MonoBehaviour
 {
     public string KEY;
     public SpriteRenderer icon;
+    public FOOD_STATE fOOD_STATE = FOOD_STATE.FRESH;
 
-
+    
 }

@@ -10,5 +10,10 @@ public class Trashcan : Interactable
         {
             chef.GetFoodFromHand(this, true);
         }
+
+        else if(chef.HasSalad())
+        {
+
+        }
     }
 }

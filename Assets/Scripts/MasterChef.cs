@@ -17,8 +17,11 @@ public class MasterChef : MonoBehaviour
     public GameObject interactIndicator;
     public Image item_1;
     public Image item_2;
+    public Image saladInHandIndicator; //shows if player is carrying salad
 
-    bool canInteract;
+
+    bool canInteract=false;
+    bool canMove =true;
     Interactable currentInteractable = null;
 
     Queue<string> foodsInHand = new Queue<string>();
@@ -62,6 +65,8 @@ public class MasterChef : MonoBehaviour
     //Update position and then constrain it
     private void Update()
     {
+        if (canMove == false)
+            return;
         transform.position += new Vector3(moveVector.x * Time.deltaTime * speed, moveVector.y * Time.deltaTime * speed, 0);
         Vector3 currentPosition = transform.position;
 
@@ -121,6 +126,8 @@ public class MasterChef : MonoBehaviour
 
     public bool IsHandFull()
     {
+        if (HasSalad())
+            return true;
         if (foodsInHand.Count == 2)
             return true;
         else
@@ -133,6 +140,14 @@ public class MasterChef : MonoBehaviour
             return false;
         else
             return true;
+    }
+
+    public bool HasSalad()
+    {
+        if (saladInHandIndicator.gameObject.activeSelf)
+            return true;
+        else
+            return false;
     }
 
     public void GetFoodFromHand(Interactable interactable, bool destroyOnTransfer = false)
@@ -165,5 +180,21 @@ public class MasterChef : MonoBehaviour
 
         item_1.gameObject.SetActive(true);
         item_1.color = DataManager.instance.GetFoodWithKey(foodName).icon.color;
+    }
+
+    public void SetMoveState(bool state)
+    {
+        canMove = state;
+    }
+
+    public void SetInteractionState(bool state)
+    {
+        canInteract = state;
+        interactIndicator.SetActive(state);
+    }
+
+    public void CollectSaladFromCuttingBoard(List<string> itemsInSalad)
+    {
+        saladInHandIndicator.gameObject.SetActive(true);
     }
 }
