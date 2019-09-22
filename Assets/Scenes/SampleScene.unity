@@ -298,6 +298,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 260396778, guid: f92767e76b21a354aacb83bdf1109e2c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f92767e76b21a354aacb83bdf1109e2c, type: 3}
 --- !u!4 &221634541 stripped
@@ -560,6 +564,10 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 260396778, guid: f92767e76b21a354aacb83bdf1109e2c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f92767e76b21a354aacb83bdf1109e2c, type: 3}
@@ -895,6 +903,10 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 260396778, guid: f92767e76b21a354aacb83bdf1109e2c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f92767e76b21a354aacb83bdf1109e2c, type: 3}
@@ -1398,6 +1410,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foodObject: {fileID: 0}
+  orderdata: {fileID: 11400000, guid: 0267d74a372e55d48bb3999cfd775698, type: 2}
 --- !u!114 &1186943001
 MonoBehaviour:
   m_ObjectHideFlags: 0

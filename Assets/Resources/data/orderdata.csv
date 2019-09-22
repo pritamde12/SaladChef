@@ -1,0 +1,4 @@
+type,waitingTime,reward,penalty
+EASY,18,20,5
+MEDIUM,25,35,5
+HARD,30,50,10

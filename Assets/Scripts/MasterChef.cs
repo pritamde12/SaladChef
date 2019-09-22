@@ -247,7 +247,7 @@ public class MasterChef : MonoBehaviour
         SaladInHandIndicator(false);
 
 
-        salad.transform.localScale = foodTargetScale/2;
+        salad.transform.localScale = foodTargetScale;
 
 
         Sequence sequence = DOTween.Sequence();
