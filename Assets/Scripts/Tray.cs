@@ -4,9 +4,16 @@ using UnityEngine;
 using DG.Tweening;
 public class Tray : Interactable
 {
+
+    public PLAYER BELONGS_TO;
+
+
     public override void OnInteract(MasterChef chef)
     {
-      if(transform.childCount == 0)
+        if (BELONGS_TO != chef.playerType)
+            return;
+
+        if (transform.childCount == 0)
         {
             Debug.Log("check if hand is empty");
             //take food

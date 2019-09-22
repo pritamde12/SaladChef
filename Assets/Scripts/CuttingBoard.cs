@@ -10,14 +10,22 @@ public class CuttingBoard : Interactable
 
     List<string> itemsInCuttingBoard = new List<string>();
 
+    public PLAYER BELONGS_TO;
+
     public override void OnInteract(MasterChef chef)
     {
+        if (BELONGS_TO != chef.playerType)
+            return;
+
+        //IF THE CHEF HAS FOOD IN HIS HAND
        if(!chef.IsHandEmpty())
         {
             currentChef = chef;
             chef.GetFoodFromHand(this);
             StartCutting();
         }
+
+       //DOES THIS CUTTING BOARD HAS SALAD
         else if(transform.GetComponentInChildren<Food>()  != null)
         {
             Food[] allCutFood = GetComponentsInChildren<Food>();
@@ -29,11 +37,12 @@ public class CuttingBoard : Interactable
                     allCutFood[i].transform.SetParent(allCutFood[0].transform);
                 }
             }
-            allCutFood[0].transform.SetParent(chef.transform);
+            allCutFood[0].transform.SetParent(chef.saladHolder);
+            Vector3 foodScale = allCutFood[0].transform.localScale;
             Sequence sequence = DOTween.Sequence();
             sequence.Append(allCutFood[0].transform.DOLocalMove(Vector3.zero, 0.3f));
-            sequence.Append(allCutFood[0].transform.DOScale(Vector3.zero, 0.3f)).OnComplete(() => Destroy(allCutFood[0].gameObject));           
-            chef.CollectSaladFromCuttingBoard(itemsInCuttingBoard);
+            sequence.Append(allCutFood[0].transform.DOScale(Vector3.zero, 0.3f));           
+            chef.SaladInHandIndicator(true, foodScale);
         }
     }
 

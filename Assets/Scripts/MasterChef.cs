@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-
+using UnityEngine.Events;
 public class MasterChef : MonoBehaviour
 {
     public PLAYER playerType;
@@ -12,13 +12,13 @@ public class MasterChef : MonoBehaviour
     float speed = 5;
     Vector2 heightBounds;
     Vector2 sideBounds;
-
+    Vector3 foodTargetScale;
     //shows if pressing the Interact button is valid
     public GameObject interactIndicator;
     public Image item_1;
     public Image item_2;
     public Image saladInHandIndicator; //shows if player is carrying salad
-
+    public Transform saladHolder;
 
     bool canInteract=false;
     bool canMove =true;
@@ -26,9 +26,11 @@ public class MasterChef : MonoBehaviour
 
     Queue<string> foodsInHand = new Queue<string>();
 
+
+
     private void OnEnable()
-    {
-        if(playerType == PLAYER.PLAYER_1)
+    {        
+        if (playerType == PLAYER.PLAYER_1)
         {
             PlayerInput.movePlayer_1 += OnMove;
             PlayerInput.InteractPlayer_1 += OnTryInteract;
@@ -186,15 +188,74 @@ public class MasterChef : MonoBehaviour
     {
         canMove = state;
     }
-
+    //deactivates/activates interaction feature
     public void SetInteractionState(bool state)
     {
         canInteract = state;
         interactIndicator.SetActive(state);
     }
 
-    public void CollectSaladFromCuttingBoard(List<string> itemsInSalad)
+    public void SaladInHandIndicator(bool state, Vector3 originalScale)
     {
-        saladInHandIndicator.gameObject.SetActive(true);
+        foodTargetScale = originalScale;
+        saladInHandIndicator.gameObject.SetActive(state);
+
+       
+        if(state)
+        {
+            Food[] foods = GetComponentsInChildren<Food>();
+            for (int i = 0; i < foods.Length; i++)
+            {
+                foodsInHand.Enqueue(foods[i].KEY);
+            }
+           
+        }
+        else
+        {
+            foodsInHand.Clear();
+        }
+        
+        
+    }
+
+    public void SaladInHandIndicator(bool state)
+    {
+        SaladInHandIndicator(state, Vector3.zero);
+    }
+
+    public void Serve(Transform target, List<string> currentOrder, UnityAction<bool> callback )
+    {
+        Transform salad = saladHolder.GetChild(0);
+        salad.SetParent(target);
+      
+
+
+        bool result = true;
+
+
+
+        for (int i = 0; i < currentOrder.Count; i++)
+        {
+            if(!foodsInHand.Contains(currentOrder[i]))
+            {
+                Debug.Log(currentOrder[i] + " not found");
+                result =  false;
+            }
+        }
+
+
+        SaladInHandIndicator(false);
+
+
+        salad.transform.localScale = foodTargetScale/2;
+
+
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(salad.DOLocalMove(Vector3.zero, 0.3f));
+        sequence.Append(salad.transform.DOScale(Vector3.zero, 0.3f)).OnComplete(() => { callback?.Invoke(result); Destroy(salad.gameObject); });
+
+                   
+       
+
     }
 }
