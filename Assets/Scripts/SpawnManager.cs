@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -10,11 +11,16 @@ public class SpawnManager : MonoBehaviour
     public ORDER_TYPE ORDER_GROUP = ORDER_TYPE.EASY;
     public string[] allOrders;
 
+    public static UnityAction OnCustomerLeft;
+
+    int customerLeftCount = 0;
+
     private void Start()
     {
         Shuffle();
         SpawnACustomere();
         SpawnACustomere();
+        OnCustomerLeft += SetOrderTypeAndSpawn;
     }
     public void Shuffle()
     {
@@ -37,6 +43,34 @@ public class SpawnManager : MonoBehaviour
                 break;
             }
         }
+
+    }
+
+    void SetOrderTypeAndSpawn()
+    {
+        customerLeftCount++;
+
+        if (customerLeftCount < 5)
+        {
+            ORDER_GROUP = ORDER_TYPE.EASY;
+        }
+        else if (customerLeftCount < 10)
+        {
+            ORDER_GROUP = ORDER_TYPE.MEDIUM;
+        }
+
+        else if (customerLeftCount < 14)
+        {
+            ORDER_GROUP = ORDER_TYPE.EASY;
+        }
+        else
+        {
+            int i = Random.Range(2,4);
+            ORDER_GROUP = (ORDER_TYPE)i;
+        }
+
+
+        SpawnACustomere();
 
     }
 

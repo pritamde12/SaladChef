@@ -6,14 +6,15 @@ public class Trashcan : Interactable
 {
     public override void OnInteract(MasterChef chef)
     {
-        if(!chef.IsHandEmpty())
+        if (chef.HasSalad())
+        {
+            chef.ThrowSalad(this.transform);
+        }
+        else if (!chef.IsHandEmpty())
         {
             chef.GetFoodFromHand(this, true);
         }
 
-        else if(chef.HasSalad())
-        {
-
-        }
+       
     }
 }

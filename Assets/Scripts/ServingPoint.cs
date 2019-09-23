@@ -17,7 +17,7 @@ public class ServingPoint : Interactable
     List<string> currentOrder = new List<string>();
 
 
-    private UnityAction<bool> OnServed;
+    private UnityAction<bool,ORDER_TYPE,PLAYER> OnServed;
     public Transform iconParent;
 
     public GameObject timerObject;
@@ -46,9 +46,12 @@ public class ServingPoint : Interactable
     {
         Debug.Log("Deactivating");
         timerObject.SetActive(false);
-        customer.transform.DOLocalMoveY(4.37f, 2).OnComplete(() => isAvailable = true);
+        customer.transform.DOLocalMoveY(4.37f, 2).OnComplete(()=> { isAvailable = true; SpawnManager.OnCustomerLeft?. Invoke();  });
         HideOrder();
+        interactionTrigger.enabled = false;
     }
+
+    
 
     bool isAvailable = true;
 
@@ -63,15 +66,17 @@ public class ServingPoint : Interactable
         }
     }
 
-    void CheckResult(bool result)
+    void CheckResult(bool result, ORDER_TYPE oRDER_TYPE, PLAYER pLAYER)
     {
         if(result)
         {
+            GameManager.UpdateScore(pLAYER, DataManager.instance.GetReward(oRDER_TYPE));
             //reward and leave
-            customer.transform.DOLocalMoveY(4.37f, 2).OnComplete(()=> isAvailable = true);
+            customer.transform.DOLocalMoveY(4.37f, 2).OnComplete(()=> { isAvailable = true;  SpawnManager.OnCustomerLeft?.Invoke(); });
             HideOrder();
             customer.StopTimer();
             DeactivateTimer();
+           
         }
         else
         {
@@ -84,6 +89,7 @@ public class ServingPoint : Interactable
 
     public void CallACustomer(List<string> order)
     {
+        currentOrder = new List<string>();
         ORDER_TYPE oRDER_TYPE = (ORDER_TYPE)order.Count;
         Debug.Log(order.Count);
         currentOrder = order;

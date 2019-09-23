@@ -223,11 +223,13 @@ public class MasterChef : MonoBehaviour
         SaladInHandIndicator(state, Vector3.zero);
     }
 
-    public void Serve(Transform target, List<string> currentOrder, UnityAction<bool> callback )
+    public void Serve(Transform target, List<string> currentOrder, UnityAction<bool,ORDER_TYPE,PLAYER> callback )
     {
         Transform salad = saladHolder.GetChild(0);
         salad.SetParent(target);
-      
+        salad.transform.localScale = Vector3.one;
+        ORDER_TYPE oRDER_TYPE = (ORDER_TYPE)currentOrder.Count;
+
 
 
         bool result = true;
@@ -246,16 +248,36 @@ public class MasterChef : MonoBehaviour
 
         SaladInHandIndicator(false);
 
-
-        salad.transform.localScale = foodTargetScale;
+        //foreach (SpriteRenderer item in salad)
+        //{
+        //    item.sortingOrder = 10;
+        //}
+        //salad.transform.localScale = foodTargetScale;
 
 
         Sequence sequence = DOTween.Sequence();
         sequence.Append(salad.DOLocalMove(Vector3.zero, 0.3f));
-        sequence.Append(salad.transform.DOScale(Vector3.zero, 0.3f)).OnComplete(() => { callback?.Invoke(result); Destroy(salad.gameObject); });
+        sequence.Append(salad.transform.DOScale(Vector3.zero, 0.3f)).OnComplete(() => { callback?.Invoke(result, oRDER_TYPE, playerType); Destroy(salad.gameObject); });
 
-                   
+        
        
 
     }
+
+    public void ThrowSalad(Transform target)
+    {
+        Transform salad = saladHolder.GetChild(0);
+        salad.SetParent(target);
+        salad.transform.localScale = Vector3.one;
+
+        SaladInHandIndicator(false);
+
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(salad.DOLocalMove(Vector3.zero, 0.3f));
+        sequence.Append(salad.transform.DOScale(Vector3.zero, 0.3f)).OnComplete(() => { Destroy(salad.gameObject); });
+
+        foodsInHand.Clear();
+
+    }
+
 }
